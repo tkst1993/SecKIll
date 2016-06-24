@@ -13,7 +13,7 @@ public interface SecKillDao {
      * 减库存
      * @param seckillId
      * @param killTime
-     * @return
+     * @return 表示更新的记录行数
      */
     int reduceNumber(long seckillId,Date killTime);
 

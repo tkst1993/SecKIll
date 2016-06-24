@@ -66,7 +66,7 @@ public class SecKill {
     public String toString() {
         return "SecKill{" +
                 "seckillId=" + seckillId +
-                ", name='" + name + '\'' +
+                ", name='" + name  +
                 ", number=" + number +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
