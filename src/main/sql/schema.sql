@@ -17,7 +17,7 @@ KEY idx_create_time(create_time)
 create table success_killed(
 `seckill_id` bigint NOT NULL COMMENT '秒杀商品ID',
 `user_phone` bigint NOT NULL COMMENT '用户手机号',
-`state` TINYINT NOT NULL DEFAULT -1 COMMENT '状态表示:-1:无效 0 成功 1 已付款 2 已发货',
+`state` TINYINT NOT NULL DEFAULT 0 COMMENT '状态表示:-1:无效 0 成功 1 已付款 2 已发货',
 `create_time` TIMESTAMP NOT NULL COMMENT '创建时间',
 PRIMARY KEY (seckill_id,user_phone),/*联合主键:*/
 key idx_create_time(create_time)

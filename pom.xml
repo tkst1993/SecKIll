@@ -126,6 +126,11 @@
       <artifactId>spring-test</artifactId>
       <version>4.0.5.RELEASE</version>
     </dependency>
+    <dependency>
+      <groupId>org.mybatis</groupId>
+      <artifactId>mybatis</artifactId>
+      <version>3.2.5</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>seckill</finalName>
