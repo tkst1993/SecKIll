@@ -2,6 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31f8e81b-1130-4fc7-a60e-66b3040d40e5" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/databaseSettings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/debugger.renderers.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/debugger.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/diff.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/file.template.settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/other.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web-browsers.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="seckill.iws" />
@@ -849,7 +856,7 @@
       <workItem from="1466932472809" duration="2272000" />
       <workItem from="1466994502177" duration="4261000" />
       <workItem from="1467018788420" duration="10000" />
-      <workItem from="1467031126256" duration="8023000" />
+      <workItem from="1467031126256" duration="8196000" />
     </task>
     <task id="LOCAL-00001" summary="加入配置文件">
       <created>1466680409924</created>
@@ -899,7 +906,13 @@
       <option name="project" value="LOCAL" />
       <updated>1467073190151</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="服务层框架编码">
+      <created>1467073721476</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1467073721476</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -935,7 +948,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47348000" />
+    <option name="totallyTimeSpent" value="47521000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
