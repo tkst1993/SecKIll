@@ -13,18 +13,24 @@ import org.seckill.exception.SecKillException;
 import org.seckill.service.SecKillService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import javax.xml.ws.soap.Addressing;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by tangke on 2016/6/28.
  */
+@Service
 public class SecKIllServiceImpl implements SecKillService {
     private Logger logger= LoggerFactory.getLogger(SecKIllServiceImpl.class);
-
+    @Autowired
     private SecKillDao seckillDao;
+    @Autowired
     private SuccessKilledDao successKilledDao;
     //md5盐值字符串
     private final String salt = "erwqjinwewrjinvn324332#$@@%@#";
@@ -63,6 +69,18 @@ public class SecKIllServiceImpl implements SecKillService {
         return md5;
     }
 
+    /**
+     * 使用注解控制事务方法的优点：1、明确编程风格 2、保证事务方法执行时间尽可能短
+     * 3、不是所有方法都需要事务如只有一条修改操作，只读操作不需要事务
+     * @param seckillId
+     * @param userPhone
+     * @param md5
+     * @return
+     * @throws SecKillException
+     * @throws RepeatKillException
+     * @throws SecKillCloseException
+     */
+    @Transactional
     public SecKillExecution executeSecKill(long seckillId, long userPhone, String md5) throws SecKillException, RepeatKillException, SecKillCloseException {
         if(md5 == null||!md5.equals(getMD5(seckillId)))
         {
