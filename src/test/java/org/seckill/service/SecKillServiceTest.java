@@ -44,6 +44,7 @@ public class SecKillServiceTest {
 
     @Test
     public void testExecuteSecKill() throws Exception {
+        System.out.println("test2");
 
     }
 }
