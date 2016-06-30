@@ -31,7 +31,7 @@ public class SuccessKilledDaoTest {
     @Test
     public void testQueryByIdWithSecKill() throws Exception {
         long id =1001L;
-        long phoneNum = 13502181181L;
+        long phoneNum = 13502181182L;
         SuceessKilled sk = successKilledDao.queryByIdWithSecKill(id,phoneNum);
         System.out.println("testQueryByIdWithSecKill:"+sk);
         System.out.println("seckill"+sk.getSeckill());

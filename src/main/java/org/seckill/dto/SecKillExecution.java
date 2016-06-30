@@ -63,4 +63,14 @@ public class SecKillExecution {
         this.state = ske.getState();
         this.stateInfo = ske.getStateInfo();
     }
+
+    @Override
+    public String toString() {
+        return "SecKillExecution{" +
+                "seckillId=" + seckillId +
+                ", state=" + state +
+                ", stateInfo='" + stateInfo + '\'' +
+                ", successKilled=" + successKilled +
+                '}';
+    }
 }
