@@ -38,6 +38,7 @@ public class SecKillServiceTest {
 
     @Test
     public void testExportSeckillUrl() throws Exception {
+        System.out.println("test");
 
     }
 
