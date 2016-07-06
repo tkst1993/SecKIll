@@ -33,4 +33,7 @@ public interface SecKillDao {
      * @return
      */
     List<SecKill> queryAll(@Param("offset") int offset, @Param("limit") int limit);
+
+
+    int insertSeckillTest(@Param("name") String name);
 }

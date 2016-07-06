@@ -51,16 +51,16 @@ public class SecKill {
         this.endTime = endTime;
     }
 
-    public Date getCrateTime() {
-        return crateTime;
+    public Date getcreateTime() {
+        return createTime;
     }
 
-    public void setCrateTime(Date crateTime) {
-        this.crateTime = crateTime;
+    public void setcreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     private Date endTime;
-    private Date crateTime;
+    private Date createTime;
 
     @Override
     public String toString() {
@@ -70,7 +70,7 @@ public class SecKill {
                 ", number=" + number +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
-                ", crateTime=" + crateTime +
+                ", createTime=" + createTime +
                 '}';
     }
 }

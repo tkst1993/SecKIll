@@ -49,4 +49,11 @@ public class SecKillDaoTest {
             System.out.println(seckill);
         }
     }
+    @Test
+    public void insertSeckillTest() throws Exception{
+        String name="2000元秒杀外星人电脑";
+        int i = seckillDao.insertSeckillTest(name);
+        System.out.println("受影响行数："+i);
+
+    }
 }
