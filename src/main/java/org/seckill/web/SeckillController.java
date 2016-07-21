@@ -53,7 +53,7 @@ public class SeckillController {
             method=RequestMethod.POST,
             produces = {"application/json;charset=utf-8"})
     @ResponseBody
-    public SeckillResult<Exposer> export(Long seckillId){
+    public SeckillResult<Exposer> export(@PathVariable("seckillId")Long seckillId){
         SeckillResult<Exposer> res ;
         try {
             Exposer exposer = seckillService.exportSeckillUrl(seckillId);
@@ -67,9 +67,9 @@ public class SeckillController {
     }
     @RequestMapping(value = "/{seckillId}/{md5}/execution",method = RequestMethod.POST)
     @ResponseBody
-    public SeckillResult<SecKillExecution>execute(Long seckillId,
-                                                  String md5,
-                                                  @CookieValue(value = "userPhone",required = false) Long userPhone)
+    public SeckillResult<SecKillExecution>execute(@PathVariable("seckillId")Long seckillId,
+                                                  @PathVariable("md5")String md5,
+                                                  @CookieValue(value = "killPhone",required = false) Long userPhone)
     {
         //spring valid
         if(userPhone == null){
@@ -94,6 +94,7 @@ public class SeckillController {
 
     }
     @RequestMapping(value="/time/now",method = RequestMethod.GET)
+    @ResponseBody
     public SeckillResult<Long>time(){
         Date now = new Date();
         return new SeckillResult(true,now.getTime());

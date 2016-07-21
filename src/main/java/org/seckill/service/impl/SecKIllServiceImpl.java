@@ -2,6 +2,7 @@ package org.seckill.service.impl;
 
 import org.seckill.dao.SecKillDao;
 import org.seckill.dao.SuccessKilledDao;
+import org.seckill.dao.cache.RedisDao;
 import org.seckill.dto.Exposer;
 import org.seckill.dto.SecKillExecution;
 import org.seckill.entity.SecKill;
@@ -17,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.xml.ws.soap.Addressing;
 import java.util.Date;
@@ -32,6 +35,9 @@ public class SecKIllServiceImpl implements SecKillService {
     private SecKillDao seckillDao;
     @Autowired
     private SuccessKilledDao successKilledDao;
+
+    @Autowired
+    private RedisDao redisDao;
     //md5盐值字符串
     private final String salt = "erwqjinwewrjinvn324332#$@@%@#";
 
@@ -43,22 +49,27 @@ public class SecKIllServiceImpl implements SecKillService {
         return seckillDao.queryById(seckillId);
     }
 
-    public Exposer exportSeckillUrl(long seckillId) {
-        SecKill sk = seckillDao.queryById(seckillId);
+    public Exposer exportSeckillUrl(@PathVariable("seckillId")long seckillId) {
+        //用redis缓存起来，减少数据库的压力
+       // SecKill sk = seckillDao.queryById(seckillId);
+        SecKill sk = redisDao.getSeckill(seckillId);
         if(sk == null){
-            return new Exposer(false,seckillId);
-        }else{
-            long nowTime = System.currentTimeMillis();
-            long sTime = sk.getStartTime().getTime();
-            long eTime = sk.getEndTime().getTime();
-            if(sTime<nowTime&&eTime>nowTime){
-
-                String md5 = getMD5(seckillId);
-                return new Exposer(true,md5,seckillId);
+            sk = seckillDao.queryById(seckillId);
+            if(sk == null){
+                return new Exposer(false,seckillId);
             }else{
-                return new Exposer(false,nowTime,sTime,eTime,seckillId);
+                redisDao.putSeckill(sk);
             }
         }
+        long nowTime = System.currentTimeMillis();
+        long sTime = sk.getStartTime().getTime();
+        long eTime = sk.getEndTime().getTime();
+        if(sTime>nowTime||eTime<nowTime){
+            return new Exposer(false,nowTime,sTime,eTime,seckillId);
+        }
+        String md5 = getMD5(seckillId);
+        return new Exposer(true,md5,seckillId);
+
 
     }
 
@@ -81,7 +92,9 @@ public class SecKIllServiceImpl implements SecKillService {
      * @throws SecKillCloseException
      */
     @Transactional
-    public SecKillExecution executeSecKill(long seckillId, long userPhone, String md5) throws SecKillException, RepeatKillException, SecKillCloseException {
+    public SecKillExecution executeSecKill(@PathVariable("seckillId")long seckillId,
+                                           @CookieValue(value = "userPhone",required = false)long userPhone,
+                                           @PathVariable("md5")String md5) throws SecKillException, RepeatKillException, SecKillCloseException {
         if(md5 == null||!md5.equals(getMD5(seckillId)))
         {
             throw new SecKillException("seckill data rewrite");
@@ -89,23 +102,24 @@ public class SecKIllServiceImpl implements SecKillService {
         //执行秒杀逻辑：减库存+记录购买行为
         Date nowTime = new Date();
         try {
-            //减库存
-            int updateCount = seckillDao.reduceNumber(seckillId,nowTime);
-            if(updateCount<=0){
-                //没有更新到记录，秒杀结束
-                throw new SecKillCloseException("seckill is closed");
-            }else {
-                //插入购买行为
-                int insertCount = successKilledDao.insertSuccessKilled(seckillId, userPhone);
-                if (insertCount <= 0) {
-                    //重复秒杀
-                    throw new RepeatKillException("seckill repeat");
-                } else {
-                    //秒杀成功
-                    SuceessKilled sk = successKilledDao.queryByIdWithSecKill(seckillId, userPhone);
-                    return new SecKillExecution(seckillId, SecKillStateEnum.SUCCESS, sk);
+            //插入购买行为
+            int insertCount = successKilledDao.insertSuccessKilled(seckillId, userPhone);
+            if (insertCount <= 0) {
+                //重复秒杀
+                throw new RepeatKillException("seckill repeat");
+            } else {
+
+                //减库存
+                int updateCount = seckillDao.reduceNumber(seckillId,nowTime);
+                if(updateCount<=0){
+                    //没有更新到记录，秒杀结束
+                    throw new SecKillCloseException("seckill is closed");
                 }
+                //秒杀成功
+                SuceessKilled sk = successKilledDao.queryByIdWithSecKill(seckillId, userPhone);
+                return new SecKillExecution(seckillId, SecKillStateEnum.SUCCESS, sk);
             }
+
         }catch(SecKillCloseException e){
             throw e;
         }catch(RepeatKillException e){
