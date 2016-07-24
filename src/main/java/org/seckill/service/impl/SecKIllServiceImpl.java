@@ -1,5 +1,6 @@
 package org.seckill.service.impl;
 
+import org.apache.commons.collections.MapUtils;
 import org.seckill.dao.SecKillDao;
 import org.seckill.dao.SuccessKilledDao;
 import org.seckill.dao.cache.RedisDao;
@@ -23,7 +24,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.xml.ws.soap.Addressing;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tangke on 2016/6/28.
@@ -131,4 +134,34 @@ public class SecKIllServiceImpl implements SecKillService {
         }
 
     }
+
+    public SecKillExecution executeSecKillProcedure(long seckillId, long userPhone, String md5) throws SecKillException, RepeatKillException, SecKillCloseException {
+        if(md5 == null||!md5.equals(getMD5(seckillId)))
+        {
+            return new SecKillExecution(seckillId,SecKillStateEnum.DATA_REWRITE);
+        }
+        Map<String,Object> map = new HashMap<String, Object>();
+        Date killTime = new Date();
+        map.put("killTime",killTime);
+        map.put("seckillId",seckillId);
+        map.put("phone",userPhone);
+        map.put("r_result",null);
+        //执行存储过程,result被复制
+        try {
+            seckillDao.killByProcedure(map);
+            //获取result
+            int result = MapUtils.getInteger(map,"r_result",-2);
+            if(result == 1){
+                SuceessKilled sk =successKilledDao.queryByIdWithSecKill(seckillId,userPhone);
+                return new SecKillExecution(seckillId,SecKillStateEnum.SUCCESS,sk);
+            }else{
+                return new SecKillExecution(seckillId,SecKillStateEnum.stateOf(result));
+            }
+        }catch (Exception e){
+            logger.error(e.getMessage() , e);
+            return new SecKillExecution(seckillId,SecKillStateEnum.INNER_ERROR);
+        }
+    }
+
+
 }

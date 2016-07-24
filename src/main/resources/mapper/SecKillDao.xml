@@ -30,5 +30,18 @@
         values(#{name},100,'2016-01-01 00:00:00','2016-01-02 00:00:00')
     </insert>
 
+    <!-- 使用mybatis调用存储过程-->
+
+    <parameterMap type="map" id="killByProcedureParaMap">
+        <parameter property="seckillId" jdbcType="BIGINT" mode="IN"/>
+        <parameter property="phone" jdbcType="BIGINT" mode="IN"/>
+        <parameter property="killTime" jdbcType="TIMESTAMP" mode="IN"/>
+        <parameter property="r_result" jdbcType="INTEGER" mode="OUT"/>
+    </parameterMap>
+
+    <select id="killByProcedure" statementType="CALLABLE" parameterMap="killByProcedureParaMap">
+        call seckill.execute_seckill(?,?,?,?)
+    </select>
+
 </mapper>
 

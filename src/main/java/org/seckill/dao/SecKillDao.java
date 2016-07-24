@@ -6,6 +6,7 @@ import org.seckill.entity.SecKill;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tangke on 2016/6/13.
@@ -36,4 +37,10 @@ public interface SecKillDao {
 
 
     int insertSeckillTest(@Param("name") String name);
+
+    /**
+     * 使用存储过程进行秒杀
+     * @param paramMap
+     */
+    void killByProcedure(Map<String,Object> paramMap);
 }
