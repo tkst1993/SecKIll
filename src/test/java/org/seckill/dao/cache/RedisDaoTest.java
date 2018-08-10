@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.junit.Assert.*;
 
 /**
- * Created by tangke on 2018/7/29.
+ * Created by tangke on 2018/7/29. 缓存测试
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 //告诉Junit4 Spring配置文件
